@@ -1,0 +1,8 @@
+package com.ecom.product.dto;
+
+import jakarta.validation.constraints.NotNull;
+
+import java.math.BigDecimal;
+
+public record CreateInventoryRequestDTO(@NotNull Long productId,@NotNull Long sellerId,@NotNull BigDecimal price) {
+}

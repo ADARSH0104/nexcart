@@ -1,0 +1,10 @@
+target/
+*.log
+*.class
+*.jar
+*.war
+*.iml
+.idea/
+.env
+.DS_Store
+desktop.ini
