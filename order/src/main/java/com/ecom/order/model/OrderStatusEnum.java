@@ -1,11 +1,11 @@
 package com.ecom.order.model;
 
 public enum OrderStatusEnum {
-    INITIATED,         
-    CONFIRMED,         
-    PAYMENT_PROCESSING,
-    COMPLETED,         
-    CANCELLED,         
-    FAILED,            
-    EXPIRED            
+    CREATED,
+    INVENTORY_RESERVED,
+    PAYMENT_PENDING,
+    PAID,
+    COMPLETED,
+    CANCELLED,
+    EXPIRED
 }

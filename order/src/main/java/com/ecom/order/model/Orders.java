@@ -16,7 +16,7 @@ public class Orders {
     private UUID id;
 
     @Column(nullable = false)
-    private Long userId;
+    private UUID userId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -29,6 +29,12 @@ public class Orders {
     private Instant confirmedOn;
 
     @Column
+    private BigDecimal totalAmount ;
+
+    @Column
+    private Long totalQuantity;
+
+    @Column
     private Instant expiryAt;
 
 
@@ -39,7 +45,7 @@ public class Orders {
     protected Orders() {
     }
 
-    public Orders(Instant confirmedOn, Instant createdOn, Instant expiryAt, OrderStatusEnum status, Long userId) {
+    public Orders(Instant confirmedOn, Instant createdOn, Instant expiryAt, OrderStatusEnum status, UUID userId) {
         this.confirmedOn = confirmedOn;
         this.createdOn = createdOn;
         this.expiryAt = expiryAt;
@@ -47,19 +53,19 @@ public class Orders {
         this.userId = userId;
     }
 
-    public static Orders create(@NotNull Long userId) {
-        return new Orders(null,null,null,OrderStatusEnum.INITIATED,userId);
+    public static Orders create(UUID userId) {
+        return new Orders(null,null,null,OrderStatusEnum.CREATED,userId);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public Long getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
@@ -87,6 +93,26 @@ public class Orders {
         this.expiryAt = expiryAt;
     }
 
+    public OrderStatusEnum getStatus() {
+        return status;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public Long getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    public void setTotalQuantity(Long totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
+
     public void recalculateTotals(List<OrderItem> orderItems) {
         BigDecimal newPrice = BigDecimal.ZERO;
         Long newQuantity = 0L;
@@ -94,6 +120,8 @@ public class Orders {
             newPrice = newPrice.add(orderItem.getTotalPrice());
             newQuantity += orderItem.getTotalQuantity();
         }
+        this.totalAmount = newPrice;
+        this.totalQuantity = newQuantity;
     }
 
     public void setStatus(OrderStatusEnum status) {

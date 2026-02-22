@@ -38,9 +38,9 @@ class OrderController {
 //        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 //   }
 
-    @PostMapping("/initiate")
+    @PostMapping("/create")
     public ResponseEntity initiateOrder(@RequestBody @Valid OrderDetailReqDTO requestDTO){
-        this.orderWritePlatformService.initiate(requestDTO);
+        this.orderWritePlatformService.create(requestDTO);
         return ResponseEntity.ok().build();
     }
 
@@ -50,9 +50,9 @@ class OrderController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/complete/{orderId}")
+    @PostMapping("/payment/{orderId}")
     public ResponseEntity complete(@PathVariable UUID orderId){
-        this.orderWritePlatformService.complete(orderId);
+        this.orderWritePlatformService.intitiatePayment(orderId);
         return ResponseEntity.ok().build();
     }
 }

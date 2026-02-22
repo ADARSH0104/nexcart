@@ -13,7 +13,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
     List<OrderItem> findAllByOrders_Id(UUID ordersId);
 
-    Boolean findByInventoryIdAndOrders_UserIdAndOrders_expiryAtBefore(Long inventoryId, Long ordersUserId, Instant ordersExpiryAtBefore);
+    Boolean findByInventoryIdAndOrders_UserIdAndOrders_expiryAtBefore(Long inventoryId, UUID ordersUserId, Instant ordersExpiryAtBefore);
 
-    Boolean findByInventoryIdAndOrders_UserIdAndOrders_expiryAtAfter(Long inventoryId, Long ordersUserId, Instant ordersExpiryAtAfter);
+    Boolean findByInventoryIdAndOrders_UserIdAndOrders_expiryAtAfter(Long inventoryId, UUID ordersUserId, Instant ordersExpiryAtAfter);
 }
