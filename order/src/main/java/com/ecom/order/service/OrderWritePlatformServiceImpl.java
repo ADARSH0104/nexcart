@@ -12,7 +12,6 @@ import com.ecom.order.model.*;
 import com.ecom.order.repository.OrderEventRepository;
 import com.ecom.order.repository.OrderItemRepository;
 import com.ecom.order.repository.OrderRepository;
-import org.hibernate.query.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -151,7 +150,13 @@ class OrderWritePlatformServiceImpl implements OrderWritePlatformService {
         order.setStatus(OrderStatusEnum.PAID);
         this.orderRepository.save(order);
 
-        this.notificationEventProducer.send("order-paid", order.getId(), new NotificationDTO(order.getId(), order.getUserId()));
+        List<OrderItem> items = this.orderItemRepository.findAllByOrders_Id(key);
+        List<OrderItemDetailsDTO> orderDetails = new ArrayList<>();
+        for(OrderItem item:items){
+            orderDetails.add(new OrderItemDetailsDTO(item.getInventoryId(),item.getTotalPrice(), item.getTotalQuantity()));
+        }
+
+        this.notificationEventProducer.send("order-confirmed", order.getId(), new NotificationDTO(order.getId(), order.getUserId(),order.getTotalAmount(),orderDetails));
 
     }
 }

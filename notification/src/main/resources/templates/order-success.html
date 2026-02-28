@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f8;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .header {
+            background: #111827;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 30px;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        .amount-box {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f9fafb;
+            border-left: 4px solid #111827;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .footer {
+            background: #f1f1f1;
+            text-align: center;
+            padding: 15px;
+            font-size: 13px;
+            color: #666666;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #111827;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th {
+            background: #111827;
+            color: #ffffff;
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eeeeee;
+            font-size: 14px;
+            color: #333333;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) td {
+            background: #f9fafb;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header">NexCart</div>
+
+    <div class="content">
+        <h2>Order Confirmed 🎉</h2>
+
+        <p>Hi <strong th:text="${customerName}">Customer</strong>,</p>
+
+        <p>Thank you for shopping with <strong>NexCart</strong>. Your payment has been successfully processed.</p>
+
+        <!-- Product Table -->
+        <table>
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${productLines}">
+                <td th:text="${item.productName}">Product Name</td>
+                <td th:text="${item.quantity}">1</td>
+                <td th:text="'₹' + ${item.price}">₹0.00</td>
+                <td th:text="'₹' + ${item.price * item.quantity}">₹0.00</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="amount-box">
+            Total Amount: ₹<span th:text="${totalAmount}">0.00</span>
+        </div>
+
+        <p>We are preparing your order and will notify you once it has been shipped.</p>
+
+        <a href="#" class="button">View Order</a>
+    </div>
+
+    <div class="footer">
+        © 2026 NexCart. All rights reserved. <br/>
+        This is an automated message. Please do not reply.
+    </div>
+
+</div>
+</body>
+</html>
