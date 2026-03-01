@@ -1,8 +1,9 @@
 package com.ecom.notification.client;
 
-import com.ecom.notification.dto.ProductDetailsDTO;
+import com.ecom.notification.dto.OrderProductsSnapshot;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ import java.util.List;
 public interface ProductServiceClient {
 
     @GetMapping("/details")
-    ProductDetailsDTO getDetails(List<Long> inventoryIds);
+    OrderProductsSnapshot getDetails(@RequestParam List<Long> inventoryIds);
 }

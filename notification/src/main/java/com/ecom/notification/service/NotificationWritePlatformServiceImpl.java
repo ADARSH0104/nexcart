@@ -43,7 +43,7 @@ public class NotificationWritePlatformServiceImpl implements NotificationWritePl
                 .stream()
                 .map(d -> d.inventoryId()).toList();
 
-        ProductDetailsDTO productDetailsDTO = this.productServiceClient.getDetails(inventoryIds);
+        OrderProductsSnapshot productDetailsDTO = this.productServiceClient.getDetails(inventoryIds);
 
         Map<Long, OrderItemDetailsDTO> map = detailsDTOS
                 .stream()
