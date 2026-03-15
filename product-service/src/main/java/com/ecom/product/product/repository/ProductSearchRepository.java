@@ -40,21 +40,26 @@ public class ProductSearchRepository {
                 p.id,
                 p.name,
                 p.brand,
-                p.price,
+                min(i.price) as price,
                 p.thumbnail_url,
                 p.in_stock,
-                MATCH(name, brand, description)
+                MATCH(p.name, brand, p.description)
                 AGAINST (? IN BOOLEAN MODE) AS score
-            FROM product p
-            WHERE 1=1
-        """);
+            FROM product p""");
+             if (req.category() != null) {
+              sql.append(" JOIN product_category pc ON p.id = pc.product_id ");
+              sql.append(" JOIN category c ON pc.category_id = c.id ");
+
+             }
+        sql.append(" JOIN inventory i on p.id = i.product_id ");
+        sql.append(" WHERE 1=1 ");
 
         List<Object> params = new ArrayList<>();
 
         // Keyword
         if (req.keyword() != null && !req.keyword().isBlank()) {
             sql.append("""
-                AND MATCH(name, brand, description)
+                AND MATCH(p.name, brand, p.description)
                 AGAINST (? IN BOOLEAN MODE)
             """);
             String keyword = "+" + req.keyword() + "*";
@@ -74,7 +79,7 @@ public class ProductSearchRepository {
 
         // Category filter
         if (req.category() != null) {
-            sql.append(" AND p.category = ?");
+            sql.append(" AND c.name = ?");
             params.add(req.category());
         }
 
@@ -95,6 +100,8 @@ public class ProductSearchRepository {
             sql.append(" AND p.in_stock = true");
         }
 
+
+        sql.append(" Group by i.product_id ");
         // Sorting
         if ("price_asc".equals(req.sort())) {
             sql.append(" ORDER BY p.price ASC");
@@ -116,14 +123,22 @@ public class ProductSearchRepository {
 
         // Count query
         StringBuilder countSql = new StringBuilder("""
-            SELECT COUNT(*) FROM product p WHERE 1=1
-        """);
+                                    SELECT COUNT(*) 
+                                    FROM product p
+                                """);
+
+        if (req.category() != null) {
+            countSql.append(" JOIN product_category pc ON p.id = pc.product_id ");
+            countSql.append(" JOIN category c ON pc.category_id = c.id ");
+        }
+        countSql.append(" JOIN inventory i on p.id = i.product_id ");
+        countSql.append(" WHERE 1=1 ");
 
         List<Object> countParams = new ArrayList<>();
 
         if (req.keyword() != null && !req.keyword().isBlank()) {
             countSql.append("""
-                AND MATCH(name, brand, description)
+                AND MATCH(p.name, brand, p.description)
                 AGAINST (? IN BOOLEAN MODE)
             """);
             countParams.add("+" + req.keyword() + "*");
@@ -137,7 +152,7 @@ public class ProductSearchRepository {
         }
 
         if (req.category() != null) {
-            countSql.append(" AND p.category = ?");
+            countSql.append(" AND c.name = ?");
             countParams.add(req.category());
         }
 
@@ -156,6 +171,8 @@ public class ProductSearchRepository {
         if (req.inStock() != null && req.inStock()) {
             countSql.append(" AND p.in_stock = true");
         }
+        countSql.append(" Group by i.product_id ");
+
 
         Long total = jdbcTemplate.queryForObject(
                 countSql.toString(),

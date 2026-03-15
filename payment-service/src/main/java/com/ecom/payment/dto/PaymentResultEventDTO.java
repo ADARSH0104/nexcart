@@ -12,6 +12,6 @@ public record PaymentResultEventDTO(
         String razorpayOrderId,
         BigDecimal amount,
         PaymentStatus status,
-        UUID userId,
+        Long userId,
         Instant occurredAt
 ) {}

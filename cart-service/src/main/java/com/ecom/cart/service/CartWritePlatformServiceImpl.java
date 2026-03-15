@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 
 @Service
@@ -31,7 +32,7 @@ public class CartWritePlatformServiceImpl implements CartWritePlatformService{
     public void saveItem(ItemRequestDTO requestDTO) {
         InventoryDetailDTO inventoryDetailDTO = this.inventoryFeignClient.getInventory(requestDTO.inventoryId());
         BigDecimal productPrice=inventoryDetailDTO.price();
-
+        Long requestedQuantity = Optional.ofNullable(requestDTO.quantity()).orElse(1L);
         if(inventoryDetailDTO.quantity()==0){
             throw new RuntimeException("Out of stock");
         }
@@ -41,17 +42,23 @@ public class CartWritePlatformServiceImpl implements CartWritePlatformService{
             cart = Cart.create(userId);
             this.cartRepository.save(cart);
         }
-
-        Boolean itemExist = this.cartItemRepository.existsByCartIdAndInventoryId(cart.getId(),requestDTO.inventoryId());
-        if(itemExist) return;
-        CartItem cartItem=CartItem.create(requestDTO.inventoryId(),cart,productPrice);
-        cartItem.increaseQuantity();
+        CartItem cartItem = this.cartItemRepository.findByCartIdAndInventoryId(cart.getId(),requestDTO.inventoryId());
+        if(cartItem == null) {
+            cartItem=CartItem.create(requestDTO.inventoryId(),cart,productPrice);
+        }
+        if (cartItem.getQuantity() + requestedQuantity > inventoryDetailDTO.quantity()) {
+            throw new RuntimeException("Out of Stock");
+        } else {
+            cartItem.increaseQuantity(requestedQuantity);
+            cartItem.setUnitPrice(productPrice) ;
+        }
         this.cartItemRepository.save(cartItem);
 
         cart.recomputeTotals(this.cartItemRepository.findAllByCartId(cart.getId()));
         this.cartRepository.save(cart);
 
     }
+
 
     @Transactional
     @Override
@@ -76,7 +83,7 @@ public class CartWritePlatformServiceImpl implements CartWritePlatformService{
        if (cartItem.getQuantity() + 1 > inventoryDetailDTO.quantity()) {
             throw new RuntimeException("Out of Stock");
         } else {
-            cartItem.increaseQuantity();
+            cartItem.increaseQuantity(1L);
        }
 
             cartItem.setUnitPrice(productPrice);

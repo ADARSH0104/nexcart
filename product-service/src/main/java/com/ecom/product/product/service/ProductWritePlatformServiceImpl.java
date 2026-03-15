@@ -31,7 +31,7 @@ public class ProductWritePlatformServiceImpl implements ProductWritePlatformServ
 
     @Transactional
     @Override
-    public void addProduct(ProductCreateRequest request, List<MultipartFile> productImages){
+    public void addProduct(ProductCreateRequest request,MultipartFile thumbnailImage, List<MultipartFile> productImages){
        try {
            Product product = new Product(request.name(), request.description(),request.brand());
 
@@ -41,16 +41,24 @@ public class ProductWritePlatformServiceImpl implements ProductWritePlatformServ
                product.addCategory(category);
            }
            this.productRepository.save(product);
-
+            handleImage(thumbnailImage,product,true);
            for (MultipartFile file : productImages) {
-                Map response = this.imageUploadService.uploadImage(file,product.getId());
-                String url = (String) response.get("secure_url");
-               ProductImage image = new ProductImage(product, url);
-               product.addImage(image);
+                handleImage(file,product,false);
            }
            this.productRepository.save(product);
        }catch (Exception e){
            throw new RuntimeException("Error creating new repository :"+e.toString());
        }
+       }
+
+       public void handleImage(MultipartFile file,Product product,boolean isThumbnail){
+           if (file == null || file.isEmpty()) {
+               return;
+           }
+           Map response = this.imageUploadService.uploadImage(file,product.getId());
+           String url = (String) response.get("secure_url");
+           ProductImage image  = new ProductImage(product, url);
+           product.addImage(image);
+           if(isThumbnail) product.setThumbnailUrl(url);
        }
 }

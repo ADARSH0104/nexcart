@@ -101,6 +101,10 @@ public class InventoryLog {
         return new InventoryLog(InventoryStatusEnum.CONFIRMED, inventory, orderId, quantity, null);
     }
 
+    public static InventoryLog deliver(Inventory inventory, UUID orderId, Long quantity) {
+        return new InventoryLog(InventoryStatusEnum.DELIVERED, inventory, orderId, quantity, null);
+    }
+
     public static InventoryLog returnItems(Inventory inventory, UUID orderId, Long quantity) {
         return new InventoryLog(InventoryStatusEnum.RETURNED, inventory, orderId, quantity, null);
     }

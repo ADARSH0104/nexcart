@@ -5,6 +5,7 @@ import com.ecom.cart.dto.ItemDetailDTO;
 import com.ecom.cart.dto.ItemRequestDTO;
 import com.ecom.cart.service.CartReadPlatformService;
 import com.ecom.cart.service.CartWritePlatformService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class CartController {
         return ResponseEntity.ok(itemDto);
     }
     @PostMapping(value = "/addItem")
-    public ResponseEntity addItem(@RequestBody ItemRequestDTO requestDTO) {
+    public ResponseEntity addItem(@Valid  @RequestBody ItemRequestDTO requestDTO) {
         this.writePlatformService.saveItem(requestDTO);
         return ResponseEntity.ok().build();
     }

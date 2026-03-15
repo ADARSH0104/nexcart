@@ -1,9 +1,6 @@
 package com.ecom.product.product.service;
 
-import com.ecom.product.product.dto.OrderProductsSnapshot;
-import com.ecom.product.product.dto.ProductDetailResponse;
-import com.ecom.product.product.dto.ProductSearchRequest;
-import com.ecom.product.product.dto.ProductSearchResponse;
+import com.ecom.product.product.dto.*;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -16,4 +13,7 @@ public interface ProductReadPlatformService {
 
     OrderProductsSnapshot getOrderProducts(List<Long> inventoryIds);
 
+    List<CategoryResponse> getCategoryList();
+
+    List<ProductOptionResponse> getProductOptions();
 }

@@ -18,7 +18,7 @@ public class Payment {
     private UUID orderId;
 
     @Column
-    private UUID userId;
+    private Long userId;
 
     @Column(nullable = false)
     private BigDecimal amount;
@@ -39,7 +39,7 @@ public class Payment {
     protected Payment() {
     }
 
-    public Payment(BigDecimal amount, Integer attempts, Instant createdAt, UUID orderId, String razorpayOrderId, PaymentStatus status, UUID userId) {
+    public Payment(BigDecimal amount, Integer attempts, Instant createdAt, UUID orderId, String razorpayOrderId, PaymentStatus status, Long userId) {
         this.amount = amount;
         this.attempts = attempts;
         this.createdAt = createdAt;
@@ -49,7 +49,7 @@ public class Payment {
         this.userId = userId;
     }
 
-    public static Payment create(BigDecimal amount,UUID orderId,UUID userId){
+    public static Payment create(BigDecimal amount, UUID orderId, Long userId){
         return new Payment(amount,0,null,orderId,null,PaymentStatus.PAYMENT_INITIATED,userId);
     }
 
@@ -109,11 +109,11 @@ public class Payment {
         this.status = status;
     }
 
-    public UUID getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 }

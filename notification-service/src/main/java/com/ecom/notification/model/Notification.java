@@ -16,7 +16,7 @@ public class Notification {
     private UUID orderId;
 
     @Column
-    private UUID userId;
+    private Long userId;
 
     @Enumerated(EnumType.STRING)
     @Column
@@ -50,7 +50,7 @@ public class Notification {
     }
     protected Notification() {
     }
-    public Notification(UUID orderId, UUID userId, NotificationType type, NotificationStatus status, Instant sentAt, Instant updatedAt, Instant createdAt, Long noOfRetries) {
+    public Notification(UUID orderId, Long userId, NotificationType type, NotificationStatus status, Instant sentAt, Instant updatedAt, Instant createdAt, Long noOfRetries) {
         this.orderId = orderId;
         this.userId = userId;
         this.type = type;
@@ -73,11 +73,11 @@ public class Notification {
         this.orderId = orderId;
     }
 
-    public UUID getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

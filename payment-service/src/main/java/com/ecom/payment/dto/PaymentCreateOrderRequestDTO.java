@@ -6,5 +6,5 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public record PaymentCreateOrderRequestDTO(@NotNull UUID orderId,@NotNull UUID userId,@NotNull @Positive BigDecimal amount) {
+public record PaymentCreateOrderRequestDTO(@NotNull UUID orderId,@NotNull Long userId, @NotNull @Positive BigDecimal amount) {
 }

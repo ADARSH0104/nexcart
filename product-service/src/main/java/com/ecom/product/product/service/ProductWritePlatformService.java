@@ -6,5 +6,5 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ProductWritePlatformService {
-    void addProduct(ProductCreateRequest request, List<MultipartFile> productImages);
+    void addProduct(ProductCreateRequest request ,MultipartFile thumbnailImage, List<MultipartFile> productImages);
 }

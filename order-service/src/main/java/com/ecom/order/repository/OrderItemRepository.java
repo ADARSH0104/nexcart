@@ -17,5 +17,5 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
     Boolean findByInventoryIdAndOrders_UserIdAndOrders_expiryAtAfter(Long inventoryId, UUID ordersUserId, Instant ordersExpiryAtAfter);
 
-    Boolean existsByInventoryIdAndOrders_UserIdAndOrders_expiryAtAfter(Long inventoryId, UUID ordersUserId, Instant ordersExpiryAtAfter);
+    Boolean existsByInventoryIdAndOrders_UserIdAndOrders_expiryAtAfter(Long inventoryId, Long ordersUserId, Instant ordersExpiryAtAfter);
 }

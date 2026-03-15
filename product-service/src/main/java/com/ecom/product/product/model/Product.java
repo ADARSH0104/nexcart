@@ -31,13 +31,11 @@ public class Product {
     @Column(nullable = false)
     private String brand;
 
-    @Column
-    private BigDecimal price;
 
     @Column
     private String thumbnailUrl;
 
-    @Column
+    @Column(nullable = false)
     private Boolean inStock;
 
     @Column
@@ -51,6 +49,16 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductImage> productImageSet;
+
+    @PrePersist
+    public void onCreate(){
+        this.createdAt=Instant.now();
+        this.inStock = false;
+    }
+    @PreUpdate
+    public void onUpdate(){
+        this.updatedAt = Instant.now();
+    }
 
     public Product() {
     }
@@ -91,19 +99,28 @@ public class Product {
         this.brand = brand;
     }
 
-    @PrePersist
-    public void onCreate(){this.createdAt=Instant.now();}
-    @PreUpdate
-    public void onUpdate(){
-        this.updatedAt = Instant.now();
-    }
-
     public Set<ProductImage> getProductImageSet() {
         return productImageSet;
     }
 
     public Set<ProductCategory> getProductCategories() {
         return productCategories;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public Boolean getInStock() {
+        return inStock;
+    }
+
+    public void setInStock(Boolean inStock) {
+        this.inStock = inStock;
     }
 
     public Set<Category> getCategory(){

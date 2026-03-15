@@ -6,9 +6,10 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
-@Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"cart_id","inventory_id"})
-})
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"cart_id","inventory_id"}),
+        indexes = @Index(name="idx_cart_item_cart", columnList="cart_id")
+)
 public class  CartItem {
 
     @Id
@@ -133,7 +134,7 @@ public class  CartItem {
         this.quantity--;
     }
 
-    public void increaseQuantity() {
-        this.quantity++;
+    public void increaseQuantity(Long quantity) {
+        this.quantity+=quantity;
     }
 }

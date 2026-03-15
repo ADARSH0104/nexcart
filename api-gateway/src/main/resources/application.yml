@@ -30,7 +30,32 @@ spring:
           uri: lb://CART-SERVICE
           predicates:
             - Path=/api/v1/cart/**
+        # Swagger routes
+        - id: AUTH-SWAGGER
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/auth-docs/**
+          filters:
+            - StripPrefix=1
 
+        - id: PRODUCT-SWAGGER
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/product-docs/**
+          filters:
+            - StripPrefix=1
+        - id: ORDER-SWAGGER
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order-docs/**
+          filters:
+            - StripPrefix=1
+        - id: CART-SWAGGER
+          uri: lb://CART-SERVICE
+          predicates:
+            - Path=/cart-docs/**
+          filters:
+            - StripPrefix=1
 jwt:
   secret: ${JWT_SECRET}
 
@@ -49,3 +74,18 @@ logging:
     org.springframework.cloud.gateway: DEBUG
     com.ecom.apigateway: DEBUG
     reactor.netty: INFO
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: auth-service
+        url: /auth-docs/v3/api-docs
+
+      - name: product-service
+        url: /product-docs/v3/api-docs
+
+      - name: order-service
+        url: /order-docs/v3/api-docs
+
+      - name: cart-service
+        url: /cart-docs/v3/api-docs

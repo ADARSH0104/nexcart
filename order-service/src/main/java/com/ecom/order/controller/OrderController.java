@@ -33,6 +33,13 @@ class OrderController {
         return ResponseEntity.ok(res);
    }
 
+   @PostMapping("/checkOut")
+   public ResponseEntity createFromCart(@RequestHeader(name="X-User-Id") Long userId){
+        UUID  orderId = this.orderWritePlatformService.createFromCart(userId);
+        this.orderWritePlatformService.confirm(orderId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+
+   }
     @PostMapping("/create")
     public ResponseEntity initiateOrder(@RequestBody @Valid OrderDetailReqDTO requestDTO){
         this.orderWritePlatformService.create(requestDTO);
@@ -48,6 +55,12 @@ class OrderController {
     @PostMapping("/payment/{orderId}")
     public ResponseEntity complete(@PathVariable UUID orderId){
         this.orderWritePlatformService.intitiatePayment(orderId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/deliver/{orderId}")
+    public ResponseEntity deliver(@PathVariable UUID orderId){
+        this.orderWritePlatformService.deliver(orderId);
         return ResponseEntity.ok().build();
     }
 }

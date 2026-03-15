@@ -33,6 +33,9 @@ public interface InventoryServiceClient {
         @PostMapping("/{id}/confirm")
     ResponseEntity confirm(@PathVariable Long id, @RequestBody InventoryRequestDTO requestDTO);
 
+        @PostMapping("/{id}/deliver")
+    ResponseEntity deliver(@PathVariable Long id, @RequestBody InventoryRequestDTO requestDTO);
+
         @PostMapping("/{id}/return")
     ResponseEntity returnStock(@PathVariable Long id, @RequestBody InventoryRequestDTO requestDTO);
 

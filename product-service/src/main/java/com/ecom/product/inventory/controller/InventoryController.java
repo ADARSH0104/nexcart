@@ -3,9 +3,11 @@ package com.ecom.product.inventory.controller;
 import com.ecom.product.inventory.dto.*;
 import com.ecom.product.inventory.service.InventoryReadPlatformService;
 import com.ecom.product.inventory.service.InventoryWritePlatformService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,8 +26,7 @@ public class InventoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<InventoryDetailDTO> getInventory(@PathVariable Long id){
-        InventoryDetailDTO response=  this.inventoryReadPlatformService.getInventory(id);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(this.inventoryReadPlatformService.getInventory(id));
     }
 
     @GetMapping("/{orderId}/checkReservations")
@@ -34,9 +35,19 @@ public class InventoryController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping(value= "/SellerInventory")
+    public ResponseEntity<Page<SellerInventoryResponse>> getSellerInventory(@RequestHeader("X-User-Id") Long sellerId,@RequestParam(name = "page",defaultValue = "0") int page ,@RequestParam(name= "size",defaultValue = "10") int size){
+        return ResponseEntity.ok(this.inventoryReadPlatformService.getSellerInventoy(sellerId,page,size));
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<SellerDashboardResponse> getSellerDashboard(@RequestHeader("X-User-Id") Long sellerId) {
+        return ResponseEntity.ok(this.inventoryReadPlatformService.getSellerDashboard(sellerId));
+    }
+
     @PostMapping("/createInventory")
-    public ResponseEntity createInventory(@RequestBody CreateInventoryRequestDTO requestDTO){
-        this.inventoryWritePlatformService.createInventory(requestDTO);
+    public ResponseEntity createInventory(@RequestBody CreateInventoryRequestDTO requestDTO,@RequestHeader("X-User-Id") Long sellerId){
+        this.inventoryWritePlatformService.createInventory(requestDTO,sellerId);
         return ResponseEntity.ok().build();
     }
 
@@ -61,6 +72,12 @@ public class InventoryController {
     @PostMapping("/{id}/confirm")
     public ResponseEntity confirm(@PathVariable Long id, @RequestBody InventoryRequestDTO requestDTO){
         this.inventoryWritePlatformService.confirm(id,requestDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/deliver")
+    public ResponseEntity deliver(@PathVariable Long id, @RequestBody InventoryRequestDTO requestDTO){
+        this.inventoryWritePlatformService.deliver(id,requestDTO);
         return ResponseEntity.ok().build();
     }
 

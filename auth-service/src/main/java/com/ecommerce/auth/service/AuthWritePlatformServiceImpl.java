@@ -92,7 +92,7 @@ public class AuthWritePlatformServiceImpl implements AuthWritePlatformService{
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userRepository.findByEmail(userDetails.getUsername());
-        String accessToken = jwtUtil.generateJwtToken(user.getEmail(),user.getRole().getRoleTypeEnum().toString());
+        String accessToken = jwtUtil.generateJwtToken(user.getEmail(),user.getRole().getRoleTypeEnum().toString(),user.getId().toString());
         String refreshToken = refreshTokenService.generateRefreshToken(user);
         setCookie(refreshToken,response);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
@@ -121,7 +121,7 @@ public class AuthWritePlatformServiceImpl implements AuthWritePlatformService{
         refreshTokenRepository.save(oldToken);
 
         String newRefreshToken = refreshTokenService.generateRefreshToken(user);
-        String accessToken = jwtUtil.generateJwtToken(user.getEmail(),user.getRole().getRoleTypeEnum().toString());
+        String accessToken = jwtUtil.generateJwtToken(user.getEmail(),user.getRole().getRoleTypeEnum().toString(),user.getId().toString());
 
         setCookie(newRefreshToken,response);
         return ResponseEntity.ok(new AuthResponse(accessToken,user.getRole().getRoleTypeEnum().toString()));

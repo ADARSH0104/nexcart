@@ -16,9 +16,11 @@ public enum InventoryStatusEnum {
 
     CONFIRMED(700),
 
-    RETURNED(800),
+    DELIVERED(800),
 
-    ADJUSTED(900);
+    RETURNED(900),
+
+    ADJUSTED(1000);
 
     private final int code;
 

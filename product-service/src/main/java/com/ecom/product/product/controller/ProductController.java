@@ -38,8 +38,8 @@ public class ProductController {
 //    }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity createProduct(@RequestPart(value = "data") ProductCreateRequest request , @RequestPart(value = "productImages")List<MultipartFile> productImages){
-        this.productWritePlatformService.addProduct(request,productImages);
+    public ResponseEntity createProduct(@RequestPart(value = "data") ProductCreateRequest request,@RequestPart(value = "thumbnailImage")MultipartFile thumbnailImage , @RequestPart(value = "productImages")List<MultipartFile> productImages){
+        this.productWritePlatformService.addProduct(request,thumbnailImage,productImages);
         return ResponseEntity.ok().build();
     }
 
@@ -72,4 +72,18 @@ public class ProductController {
 
 
     // TODO Add update price and stock  And handle thumbnail url
+
+
+
+
+    @GetMapping(value = "/categories")
+    public ResponseEntity<List<CategoryResponse>> getCategory(){
+        return ResponseEntity.ok(this.productReadPlatformService.getCategoryList());
+    }
+
+
+    @GetMapping(value = "/productOptions")
+    public ResponseEntity<List<ProductOptionResponse>> getProductOptions(){
+        return ResponseEntity.ok(this.productReadPlatformService.getProductOptions());
+    }
 }

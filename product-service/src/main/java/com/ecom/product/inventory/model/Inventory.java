@@ -40,6 +40,14 @@ public class Inventory {
     @Column(nullable = true)
     private Instant updatedOn;
 
+    @Column
+    private Long soldQuantity;
+
+    @Column
+    private Long deliveredQuantity;
+
+    @Column
+    private Long returnQuantity;
     @Version
     private Long version;
 
@@ -112,6 +120,37 @@ public class Inventory {
         this.version = version;
     }
 
+
+    public Long getSoldQuantity() {
+        return soldQuantity;
+    }
+
+    public void setSoldQuantity(Long soldQuantity) {
+        this.soldQuantity = soldQuantity;
+    }
+
+    public Long getReturnQuantity() {
+        return returnQuantity;
+    }
+
+    public void setReturnQuantity(Long returnQuantity) {
+        this.returnQuantity = returnQuantity;
+    }
+
+    public Long getDeliveredQuantity() {
+        return deliveredQuantity;
+    }
+
+    public void setDeliveredQuantity(Long deliveredQuantity) {
+        this.deliveredQuantity = deliveredQuantity;
+    }
+
+    public Long getReservedQuantity() {
+        return reservedQuantity;
+    }
+
+
+
     @PreUpdate
     public void onUpate() {
         this.updatedOn = Instant.now();
@@ -123,6 +162,9 @@ public class Inventory {
         this.createdOn = Instant.now();
         if (this.availableQuantity == null) this.availableQuantity = 0L;
         if (this.reservedQuantity == null) this.reservedQuantity = 0L;
+        if (this.soldQuantity == null) this.soldQuantity = 0L;
+        if (this.deliveredQuantity == null) this.deliveredQuantity = 0L;
+        if (this.returnQuantity == null) this.returnQuantity = 0L;
     }
 
     public void addStock(Long quantity) {
@@ -154,14 +196,27 @@ public class Inventory {
         validatePositiveQuantity(quantity);
         if (this.reservedQuantity >= quantity) {
             this.reservedQuantity -= quantity;
+            this.soldQuantity +=quantity;
         } else {
             throw new InsufficientStockException("Cannot confirm more than reserved quantity");
+        }
+    }
+
+    public void deliver(Long quantity) {
+        validatePositiveQuantity(quantity);
+        long pendingDeliveryQuantity = this.soldQuantity - this.deliveredQuantity;
+        if (pendingDeliveryQuantity >= quantity) {
+            this.deliveredQuantity += quantity;
+        } else {
+            throw new InsufficientStockException("Cannot deliver more than confirmed quantity pending delivery");
         }
     }
 
     public void returnItems(Long quantity) {
         validatePositiveQuantity(quantity);
         this.availableQuantity += quantity;
+        this.soldQuantity -=quantity;
+        this.returnQuantity +=quantity;
     }
 
     public void adjust(Long quantity) {

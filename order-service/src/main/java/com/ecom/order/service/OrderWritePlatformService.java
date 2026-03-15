@@ -16,4 +16,8 @@ public interface OrderWritePlatformService {
     void paymentFailed(UUID key, PaymentResultEventDTO message);
 
     void paymentSuccess(UUID key, PaymentResultEventDTO message);
+
+    void deliver(UUID orderId);
+
+    UUID createFromCart(Long userId);
 }
