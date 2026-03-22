@@ -1,4 +1,5 @@
 package com.ecom.order.config;
+
 import com.ecom.order.dto.PaymentResultEventDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.UUIDDeserializer;
@@ -32,6 +33,12 @@ public class KafkaConsumerConfig {
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, UUIDDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+
+        // Configure JsonDeserializer with trusted packages
+        config.put(JsonDeserializer.TRUSTED_PACKAGES, "com.ecom.*");
+        config.put(JsonDeserializer.VALUE_DEFAULT_TYPE, PaymentResultEventDTO.class.getName());
+        config.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
+
         return new DefaultKafkaConsumerFactory<>(config);
     }
 

@@ -27,6 +27,9 @@ spring:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     consumer:
       group-id: ${KAFKA_GROUP_ID}
+      properties:
+        spring.json.trusted.packages: "*"
+
 
 eureka:
   client:

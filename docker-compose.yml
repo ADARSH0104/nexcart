@@ -71,6 +71,7 @@ services:
     depends_on:
       - eureka-server
       - product-service
+      - kafka
     networks:
       - ecommerce-network
 
@@ -96,6 +97,7 @@ services:
     depends_on:
       - eureka-server
       - order-service
+      - kafka
     networks:
       - ecommerce-network
 
@@ -108,9 +110,31 @@ services:
       - ./notification-service/.env
     depends_on:
       - eureka-server
+      - kafka
+    networks:
+      - ecommerce-network
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
     networks:
       - ecommerce-network
 
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - ecommerce-network
 
 networks:
   ecommerce-network:

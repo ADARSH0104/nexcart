@@ -25,13 +25,13 @@ public class NotificationController {
         this.javaMailSender = javaMailSender;
         this.emailProvider = emailProvider;
     }
-
-    @PostMapping
-    public void sendMail(){
-        List<EmailProductLine> lines = List.of(
-                new EmailProductLine("Nike Air Max", BigDecimal.valueOf(2999), 2L),
-                new EmailProductLine("Sony Headphones", BigDecimal.valueOf(24999), 1L)
-        );
-        emailProvider.sendOrderConfirmedMail("zzz@gmail.com", "Adarsh Honnavar", BigDecimal.valueOf(10000L), lines);
-    }
+//
+//    @PostMapping
+//    public void sendMail(){
+//        List<EmailProductLine> lines = List.of(
+//                new EmailProductLine("Nike Air Max", BigDecimal.valueOf(2999), 2L),
+//                new EmailProductLine("Sony Headphones", BigDecimal.valueOf(24999), 1L)
+//        );
+//        emailProvider.sendOrderConfirmedMail("zzz@gmail.com", "Adarsh Honnavar", BigDecimal.valueOf(10000L), lines);
+//    }
 }

@@ -3,6 +3,7 @@ package com.ecom.cart.service;
 import com.ecom.cart.client.InventoryFeignClient;
 import com.ecom.cart.dto.InventoryDetailDTO;
 import com.ecom.cart.dto.ItemRequestDTO;
+import com.ecom.cart.exception.OutOfStockException;
 import com.ecom.cart.model.Cart;
 import com.ecom.cart.model.CartItem;
 import com.ecom.cart.repository.CartItemRepository;
@@ -47,7 +48,7 @@ public class CartWritePlatformServiceImpl implements CartWritePlatformService{
             cartItem=CartItem.create(requestDTO.inventoryId(),cart,productPrice);
         }
         if (cartItem.getQuantity() + requestedQuantity > inventoryDetailDTO.quantity()) {
-            throw new RuntimeException("Out of Stock");
+            throw new OutOfStockException("Cannot add more than "+ inventoryDetailDTO.quantity()+" item");
         } else {
             cartItem.increaseQuantity(requestedQuantity);
             cartItem.setUnitPrice(productPrice) ;
@@ -81,7 +82,7 @@ public class CartWritePlatformServiceImpl implements CartWritePlatformService{
         BigDecimal productPrice = inventoryDetailDTO.price();
 
        if (cartItem.getQuantity() + 1 > inventoryDetailDTO.quantity()) {
-            throw new RuntimeException("Out of Stock");
+            throw new OutOfStockException("Cannot add more than"+ cartItem.getQuantity()+"item");
         } else {
             cartItem.increaseQuantity(1L);
        }
