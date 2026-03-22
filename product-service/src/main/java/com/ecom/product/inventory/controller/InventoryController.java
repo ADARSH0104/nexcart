@@ -35,7 +35,9 @@ public class InventoryController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value= "/SellerInventory")
+
+    //get sellers all inventory data
+    @GetMapping(value= "/sellerInventory")
     public ResponseEntity<Page<SellerInventoryResponse>> getSellerInventory(@RequestHeader("X-User-Id") Long sellerId,@RequestParam(name = "page",defaultValue = "0") int page ,@RequestParam(name= "size",defaultValue = "10") int size){
         return ResponseEntity.ok(this.inventoryReadPlatformService.getSellerInventoy(sellerId,page,size));
     }
@@ -57,10 +59,26 @@ public class InventoryController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{id}/reserve")
-    public ResponseEntity reserve(@PathVariable Long id, @RequestBody InventoryRequestDTO requestDTO){
-        this.inventoryWritePlatformService.reserve(id,requestDTO);
+    @PostMapping("/{id}/priceUpdate")
+    public ResponseEntity priceUpdate(@PathVariable Long id, InventoryManageDTO requestDTO){
+        this.inventoryWritePlatformService.priceUpdate(id,requestDTO);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/adjustStock")
+    public ResponseEntity adjustStock(@PathVariable Long id, @RequestBody InventoryManageDTO requestDTO){
+        this.inventoryWritePlatformService.adjustStock(id,requestDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    /*
+    Inter service communication apis
+
+
+            */
+    @PostMapping("/{id}/reserve")
+    public ResponseEntity<InventoryStateResponse> reserve(@PathVariable Long id, @RequestBody InventoryRequestDTO requestDTO){
+        return ResponseEntity.ok(this.inventoryWritePlatformService.reserve(id,requestDTO));
     }
 
     @PostMapping("/{id}/release")
@@ -78,18 +96,6 @@ public class InventoryController {
     @PostMapping("/{id}/deliver")
     public ResponseEntity deliver(@PathVariable Long id, @RequestBody InventoryRequestDTO requestDTO){
         this.inventoryWritePlatformService.deliver(id,requestDTO);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{id}/priceUpdate")
-    public ResponseEntity priceUpdate(@PathVariable Long id, InventoryManageDTO requestDTO){
-        this.inventoryWritePlatformService.priceUpdate(id,requestDTO);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{id}/adjustStock")
-    public ResponseEntity adjustStock(@PathVariable Long id, @RequestBody InventoryManageDTO requestDTO){
-        this.inventoryWritePlatformService.adjustStock(id,requestDTO);
         return ResponseEntity.ok().build();
     }
 

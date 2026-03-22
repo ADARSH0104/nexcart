@@ -2,6 +2,7 @@ package com.ecom.order.service;
 
 import com.ecom.order.dto.OrderDetailReqDTO;
 import com.ecom.order.dto.OrderRequestDTO;
+import com.ecom.order.dto.PaymentInitiateRespose;
 import com.ecom.order.dto.PaymentResultEventDTO;
 
 import java.util.UUID;
@@ -11,7 +12,7 @@ public interface OrderWritePlatformService {
 
     void confirm(UUID orderId);
 
-    void intitiatePayment(UUID orderId);
+    PaymentInitiateRespose intitiatePayment(UUID orderId);
 
     void paymentFailed(UUID key, PaymentResultEventDTO message);
 

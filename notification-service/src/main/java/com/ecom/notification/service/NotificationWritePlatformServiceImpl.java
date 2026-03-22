@@ -54,7 +54,7 @@ public class NotificationWritePlatformServiceImpl implements NotificationWritePl
                 .stream()
                 .map(p -> {
                     OrderItemDetailsDTO item = map.get(p.inventoryId());
-                    return new EmailProductLine(p.name(), item.price(), item.quantity());
+                    return new EmailProductLine(p.name(),item.unitPrice(), item.totalPrice(), item.quantity());
                 }).toList();
 
 

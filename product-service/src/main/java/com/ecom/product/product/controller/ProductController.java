@@ -70,12 +70,6 @@ public class ProductController {
         return ResponseEntity.ok(this.productReadPlatformService.getOrderProducts(inventoryIds));
     }
 
-
-    // TODO Add update price and stock  And handle thumbnail url
-
-
-
-
     @GetMapping(value = "/categories")
     public ResponseEntity<List<CategoryResponse>> getCategory(){
         return ResponseEntity.ok(this.productReadPlatformService.getCategoryList());

@@ -1,8 +1,6 @@
 package com.ecom.order.controller;
 
-import com.ecom.order.dto.OrderDetailReqDTO;
-import com.ecom.order.dto.OrderRequestDTO;
-import com.ecom.order.dto.OrderResDTO;
+import com.ecom.order.dto.*;
 import com.ecom.order.service.OrderReadPlatformService;
 import com.ecom.order.service.OrderWritePlatformService;
 import jakarta.validation.Valid;
@@ -34,10 +32,10 @@ class OrderController {
    }
 
    @PostMapping("/checkOut")
-   public ResponseEntity createFromCart(@RequestHeader(name="X-User-Id") Long userId){
+   public ResponseEntity<OrderCreateResponse> createFromCart(@RequestHeader(name="X-User-Id") Long userId){
         UUID  orderId = this.orderWritePlatformService.createFromCart(userId);
         this.orderWritePlatformService.confirm(orderId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(new OrderCreateResponse(orderId.toString()));
 
    }
     @PostMapping("/create")
@@ -52,10 +50,9 @@ class OrderController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/payment/{orderId}")
-    public ResponseEntity complete(@PathVariable UUID orderId){
-        this.orderWritePlatformService.intitiatePayment(orderId);
-        return ResponseEntity.ok().build();
+        @PostMapping("/payment/{orderId}")
+    public ResponseEntity<PaymentInitiateRespose> complete(@PathVariable UUID orderId){
+        return ResponseEntity.ok(this.orderWritePlatformService.intitiatePayment(orderId));
     }
 
     @PostMapping("/deliver/{orderId}")

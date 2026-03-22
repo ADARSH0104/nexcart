@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/payments")
+@RequestMapping("/api/v1/payments")
 public class PaymentController {
     private final PaymentReadPlatformService paymentReadPlatformService;
     private final PaymentWritePlatformService paymentWritePlatformService;
@@ -26,7 +26,7 @@ public class PaymentController {
     }
 
     @PostMapping("/razorpay/webhook")
-    public void webhook(@RequestHeader("x-razorpay-signature") String signature,@RequestHeader("x-razorpay-event-id") String razorpayEventId, @RequestBody String req){
+    public void webhook(@RequestHeader("X-Razorpay-Signature") String signature,@RequestHeader("X-Razorpay-Event-Id") String razorpayEventId, @RequestBody String req){
         this.paymentWritePlatformService.handleWebhook(signature,razorpayEventId,req);
     }
 }
