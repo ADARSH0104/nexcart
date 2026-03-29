@@ -1,5 +1,6 @@
 package com.ecom.product.product.dto;
 
-import java.util.List;
-public record OrderProductsSnapshot(List<ProductSnapshot> products) {
+import java.util.Map;
+
+public record OrderProductsSnapshot(Map<Long,ProductSnapshot> products) {
 }

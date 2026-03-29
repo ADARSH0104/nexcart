@@ -12,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductReadPlatformServiceImpl implements ProductReadPlatformService{
@@ -62,10 +64,11 @@ public class ProductReadPlatformServiceImpl implements ProductReadPlatformServic
 
     @Override
     public OrderProductsSnapshot getOrderProducts(List<Long> inventoryIds) {
-        List<Inventory> inventories = this.inventoryRepository.findByIdIn(inventoryIds);
-        List<ProductSnapshot> productSnapshots = new ArrayList<>();
+        List<Inventory> inventories = this.inventoryRepository.findByIds(inventoryIds);
+        Map<Long,ProductSnapshot> productSnapshots = new HashMap<>();
         for(Inventory inventory :inventories){
-            productSnapshots.add(new ProductSnapshot(inventory.getProduct().getId(), inventory.getProduct().getName(),inventory.getId()));
+            Product product = inventory.getProduct();
+            productSnapshots.put(inventory.getId(),new ProductSnapshot(product.getId(), product.getName(),product.getThumbnailUrl()));
         }
         return new OrderProductsSnapshot(productSnapshots);
      }

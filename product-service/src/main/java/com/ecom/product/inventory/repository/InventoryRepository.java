@@ -4,6 +4,7 @@ import com.ecom.product.inventory.model.Inventory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,6 +26,8 @@ Boolean existsBySellerIdAndProductId(Long sellerId,Long productId);
 
     Page<Inventory> findBySellerIdOrderByCreatedOn(Long sellerId, Pageable pageable);
 
+    @Query("Select i from Inventory i JOIN FETCH i.product where i.id IN :ids")
+    List<Inventory> findByIds(List<Long> ids);
 
 //    @Query("""
 //SELECT new com.ecom.product.inventory.dto.SellerInventoryResponse(
