@@ -1,6 +1,6 @@
 package com.ecom.notification.dto;
 
-import java.util.List;
+import java.util.Map;
 
-public record OrderProductsSnapshot(List<ProductSnapshot> products) {
+public record OrderProductsSnapshot(Map<Long,ProductSnapshot> products) {
 }

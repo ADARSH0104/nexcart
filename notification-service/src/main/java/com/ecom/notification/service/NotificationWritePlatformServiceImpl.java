@@ -45,16 +45,11 @@ public class NotificationWritePlatformServiceImpl implements NotificationWritePl
 
         OrderProductsSnapshot productDetailsDTO = this.productServiceClient.getDetails(inventoryIds);
 
-        Map<Long, OrderItemDetailsDTO> map = detailsDTOS
+        List<EmailProductLine> productLines = detailsDTOS
                 .stream()
-                .collect(Collectors.toMap(OrderItemDetailsDTO::inventoryId, d -> d));
-
-        List<EmailProductLine> productLines = productDetailsDTO
-                .products()
-                .stream()
-                .map(p -> {
-                    OrderItemDetailsDTO item = map.get(p.inventoryId());
-                    return new EmailProductLine(p.name(),item.unitPrice(), item.totalPrice(), item.quantity());
+                .map(o -> {
+                    ProductSnapshot p = productDetailsDTO.products().get(o.inventoryId());
+                    return new EmailProductLine(p.name(),o.unitPrice(), o.totalPrice(),o.quantity());
                 }).toList();
 
 
